@@ -1,20 +1,24 @@
+#!/usr/bin/env python3
 import urllib
 from bs4 import BeautifulSoup
+
 import requests
 import webbrowser
+import re
 
-text = 'hello world'
+text = 'Jeff C. Liu email'
 text = urllib.parse.quote_plus(text)
 
-url = 'https://google.com/search?q=' + text
+### Google search api
+url = 'https://google.ca/search?q=' + text
 
 response = requests.get(url)
 
-#with open('output.html', 'wb') as f:
-#    f.write(response.content)
-#webbrowser.open('output.html')
-
 soup = BeautifulSoup(response.text, 'lxml')
 for g in soup.find_all(class_='g'):
-    print(g.text)
-    print('-----')
+    description = g.find('span', attrs={'class': 'st'})
+    d = description.get_text()
+    d = "".join(d.split("\n"))
+    m = re.search(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', d, re.I)
+    if m:
+        print(m.group(0))

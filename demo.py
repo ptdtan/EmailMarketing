@@ -14,6 +14,7 @@ text = urllib.parse.quote_plus(text)
 url = 'https://google.ca/search?q=' + text + "&num=100"
 
 response = requests.get(url)
+response.raise_for_status()
 
 soup = BeautifulSoup(response.text, 'lxml')
 for g in soup.find_all(class_='g'):
